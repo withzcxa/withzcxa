@@ -28,11 +28,17 @@ jobs:
           echo "$TITLE" > assets/bing-title.txt
           ls -la assets/
 
-      - name: Commit Bing picture
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "🖼️ Update Bing daily picture"
-          file_pattern: "assets/bing-daily.jpg assets/bing-title.txt"
+      - name: Commit Bing picture as repo owner
+        run: |
+          git config user.name "withzcxa"
+          git config user.email "withzcx@gmail.com"
+          git add assets/bing-daily.jpg assets/bing-title.txt
+          if git diff --cached --quiet; then
+            echo "No changes today"
+          else
+            git commit -m "🖼️ Update Bing daily picture"
+            git push
+          fi
 
       - name: Generate snake animation
         uses: Platane/snk/svg-only@v3
